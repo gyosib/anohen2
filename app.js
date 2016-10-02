@@ -9,10 +9,49 @@ var MongoStore = require('connect-mongo')(session);
 var fs = require("fs");
 var http = require('http');
 var https = require('https');
+var mongoose_usr = require('mongoose');
+var mongoose_msg = require('mongoose');
 
 var privateKey = fs.readFileSync('server.key','utf8');
 var certificate = fs.readFileSync('server.crt','utf8');
 var credentials = {key: privateKey, cert: certificate};
+
+//DetaBase ====================
+var UsrSchema = new mongoose_usr.Schema({
+	id:Number,
+	name:String,
+	pass:String,
+	x:Number,
+	y:Number
+});
+var MsgSchema = new mongoose_msg.Schema({
+	id:Number,
+	date:Date,
+	who:String,
+	msg:String
+});
+
+mongoose_usr.Promise = global.Promise;
+mongoose_msg.Promise = global.Promise;
+var usrmode = mongoose_usr.createConnection("mongodb://"+"localhost"+":27017/usr",function(err){
+	if(err){
+		console.log(err);
+	}else{
+		console.log('connection success!');
+	}
+});
+var msgmode = mongoose_msg.createConnection("mongodb://"+"localhost"+":27017/msg",function(err){
+	if(err){
+		console.log(err);
+	}else{
+		console.log('connection success!');
+	}
+});
+
+var Usr = usrmode.model('usr',UsrSchema);
+var Msg = msgmode.model('test_user',MsgSchema);
+
+//DataBase ====================
 
 var app = express();
 
@@ -133,6 +172,7 @@ io.sockets.on('connection', function(socket){
 	console.log("Listen:"+app.get('port'));
 	socket.on("sendmsg",function(data){
 		console.log("get message");
+		console.log(Usr);
 		//sending data
 		var r = data.r;
 		var dir = data.dir;
@@ -141,6 +181,7 @@ io.sockets.on('connection', function(socket){
 		var y0 = data.y;
 		//Find
 		Usr.find({},function(err,docs){
+			console.log("Hello");
 			for(var i=0;i<docs.length;i++){
 				var dx = 90000*(docs[i].x-x0);
 				var dy = 111000*(docs[i].y-y0);
@@ -159,7 +200,7 @@ io.sockets.on('connection', function(socket){
 					console.log(docs[i].name); //user data in range
 					var Msg_foru = msgmode.model(docs[i].name,MsgSchema);
 					var message = new Msg({
-						id:0,date:new Date(),who:"administractor",msg:"test"
+						id:0,date:new Date(),name:"administractor",msg:"test"
 					});
 					message.save(function(err){
 						if(err) { 
@@ -171,6 +212,7 @@ io.sockets.on('connection', function(socket){
 				}	
 			}
 		});
+		console.log("finish");
 	});
 	socket.on("loadmsg",function(data){
 		console.log("loadmsg");
@@ -183,6 +225,10 @@ io.sockets.on('connection', function(socket){
 				io.sockets.emit("loadmsg",docs);
 			}
 		});
+	});
+	socket.on("disconnect",function(){
+		mongoose_usr.disconnect();
+		mongoose_msg.disconnect();
 	});
 });
 
