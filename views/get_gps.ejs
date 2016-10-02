@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<head>
+</head>
+<body>
+ページが空白の場合は、お使いのブラウザ・端末ではご使用できない可能性があります。
+<p>また、位置情報が有効かを確認してください。</p>
+<form id="form" action="http://192.168.0.5:3100/send" method="POST"></form>
+
+<script src="//code.jquery.com/jquery-3.1.0.min.js"></script>
+<script src="../plugin/jquery-cookie/src/jquery.cookie.js" type="text/javascript"></script>
+<script type="text/javascript">
+$(function(){
+	var IP = "192.168.0.5";
+	var PORT = 3100;
+	alert("You could access this page!");
+	console.log(IP);
+    if(navigator.geolocation){
+		navigator.geolocation.watchPosition(
+			function(position){
+			console.log(position);
+			alert("I'm getting your location");
+   	 		var gx = position.coords.longitude;
+    		var gy = position.coords.latitude;
+			$.cookie("gps_x",gx);
+			$.cookie("gps_y",gy);
+			alert("your location is "+gx+","+gy);
+			//window.location.href = "http://"+IP+":"+PORT+"/send/send.html";
+			//window.close();
+			$('#form').submit();
+		});
+	}else{
+			alert("位置情報を取得できません。"+
+				"ブラウザ・端末・位置情報が有効かを確認してください");
+	}
+});
+</script>
+</body>
+</html>
+
