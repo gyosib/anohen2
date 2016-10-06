@@ -9,7 +9,7 @@
 <script src="/socket.io/socket.io.js"></script>
 <script type="text/javascript" charset="utf-8" src="http://js.api.olp.yahooapis.jp/OpenLocalPlatform/V1/jsapi?appid=dj0zaiZpPVJHakJrSDFTQUd1aSZzPWNvbnN1bWVyc2VjcmV0Jng9NGY-"></script>
 <script type="text/javascript">
-	var IP = "192.168.0.5";
+	var IP = "172.25.76.56";
 	var HTTP_PORT = "3100";
 	var HTTPS_PORT = "3200";
 	var s = io.connect('http://'+IP+':'+HTTP_PORT);
@@ -36,6 +36,7 @@ $('#send').on("click",function(){
 	s.emit("sendmsg",{
 			day:today,msg:msg,name:name,open:open,r:r,x:x,y:y,dir:dir,theta:theta
 		});
+	console.log("send success!");
 });
 
 function drawmap(direction){

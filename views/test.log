@@ -1,0 +1,277 @@
+
+> login@0.0.0 start /home/pi/Desktop/anohen2
+> node ./bin/www
+
+connection success!
+connection success!
+Success connected:!
+[0mPOST /send [32m200 [0m1063.116 ms - 4452[0m
+Listen:3000
+get message
+{ [Function: model]
+  hooks: Kareem { _pres: {}, _posts: {} },
+  base: 
+   Mongoose {
+     connections: [ [Object], [Object], [Object], [Object] ],
+     plugins: [],
+     models: {},
+     modelSchemas: 
+      { usr: [Object],
+        test_user: [Object],
+        usrs: [Object],
+        msg: [Object] },
+     options: { pluralization: true } },
+  modelName: 'usr',
+  model: [Function: model],
+  db: 
+   NativeConnection {
+     base: 
+      Mongoose {
+        connections: [Object],
+        plugins: [],
+        models: {},
+        modelSchemas: [Object],
+        options: [Object] },
+     collections: { usrs: [Object] },
+     models: { usr: [Circular] },
+     config: { autoIndex: true },
+     replica: false,
+     hosts: null,
+     host: 'localhost',
+     port: 27017,
+     user: undefined,
+     pass: undefined,
+     name: 'usr',
+     options: 
+      { db: [Object],
+        auth: {},
+        server: [Object],
+        replset: [Object],
+        mongos: undefined },
+     otherDbs: [],
+     _readyState: 1,
+     _closeCalled: false,
+     _hasOpened: true,
+     _listening: false,
+     db: 
+      EventEmitter {
+        domain: null,
+        _events: [Object],
+        _eventsCount: 6,
+        _maxListeners: undefined,
+        s: [Object],
+        serverConfig: [Getter],
+        bufferMaxEntries: [Getter],
+        databaseName: [Getter],
+        _listening: true } },
+  discriminators: undefined,
+  schema: 
+   Schema {
+     obj: 
+      { id: [Function: Number],
+        name: [Function: String],
+        pass: [Function: String],
+        x: [Function: Number],
+        y: [Function: Number] },
+     paths: 
+      { id: [Object],
+        name: [Object],
+        pass: [Object],
+        x: [Object],
+        y: [Object],
+        _id: [Object],
+        __v: [Object] },
+     subpaths: {},
+     virtuals: {},
+     singleNestedPaths: {},
+     nested: {},
+     inherits: {},
+     callQueue: [ [Object], [Object], [Object], [Object] ],
+     _indexes: [],
+     methods: {},
+     statics: {},
+     tree: 
+      { id: [Function: Number],
+        name: [Function: String],
+        pass: [Function: String],
+        x: [Function: Number],
+        y: [Function: Number],
+        _id: [Object],
+        __v: [Function: Number] },
+     _requiredpaths: undefined,
+     discriminatorMapping: undefined,
+     _indexedpaths: undefined,
+     query: {},
+     childSchemas: [],
+     s: { hooks: [Object], kareemHooks: [Object] },
+     options: 
+      { typeKey: 'type',
+        id: true,
+        noVirtualId: false,
+        _id: true,
+        noId: false,
+        validateBeforeSave: true,
+        read: null,
+        shardKey: null,
+        autoIndex: null,
+        minimize: true,
+        discriminatorKey: '__t',
+        versionKey: '__v',
+        capped: false,
+        bufferCommands: true,
+        strict: true,
+        pluralization: true },
+     '$globalPluginsApplied': true },
+  collection: 
+   NativeCollection {
+     collection: { s: [Object] },
+     opts: { bufferCommands: true, capped: false },
+     name: 'usrs',
+     collectionName: 'usrs',
+     conn: 
+      NativeConnection {
+        base: [Object],
+        collections: [Object],
+        models: [Object],
+        config: [Object],
+        replica: false,
+        hosts: null,
+        host: 'localhost',
+        port: 27017,
+        user: undefined,
+        pass: undefined,
+        name: 'usr',
+        options: [Object],
+        otherDbs: [],
+        _readyState: 1,
+        _closeCalled: false,
+        _hasOpened: true,
+        _listening: false,
+        db: [Object] },
+     queue: [],
+     buffer: false,
+     emitter: 
+      EventEmitter {
+        domain: null,
+        _events: {},
+        _eventsCount: 0,
+        _maxListeners: undefined } },
+  Query: 
+   { [Function]
+     base: 
+      Query {
+        toConstructor: [Function: toConstructor],
+        setOptions: [Function],
+        collection: [Function: collection],
+        '$where': [Function],
+        where: [Function],
+        equals: [Function: equals],
+        eq: [Function: eq],
+        or: [Function: or],
+        nor: [Function: nor],
+        and: [Function: and],
+        gt: [Function],
+        gte: [Function],
+        lt: [Function],
+        lte: [Function],
+        ne: [Function],
+        in: [Function],
+        nin: [Function],
+        all: [Function],
+        regex: [Function],
+        size: [Function],
+        maxDistance: [Function],
+        minDistance: [Function],
+        mod: [Function],
+        exists: [Function],
+        elemMatch: [Function],
+        within: [Function: within],
+        box: [Function],
+        polygon: [Function],
+        circle: [Function],
+        near: [Function: near],
+        intersects: [Function: intersects],
+        geometry: [Function: geometry],
+        select: [Function: select],
+        slice: [Function],
+        sort: [Function],
+        limit: [Function],
+        skip: [Function],
+        maxScan: [Function],
+        batchSize: [Function],
+        comment: [Function],
+        maxTime: [Function],
+        snapshot: [Function],
+        hint: [Function],
+        slaveOk: [Function],
+        read: [Function],
+        tailable: [Function],
+        merge: [Function],
+        find: [Function],
+        cursor: [Function: cursor],
+        findOne: [Function],
+        count: [Function],
+        distinct: [Function],
+        update: [Function: update],
+        remove: [Function],
+        findOneAndUpdate: [Function],
+        findOneAndRemove: [Function],
+        _findAndModify: [Function],
+        _wrapCallback: [Function],
+        setTraceFunction: [Function],
+        exec: [Function: exec],
+        thunk: [Function],
+        then: [Function],
+        stream: [Function],
+        selected: [Function: selected],
+        selectedInclusively: [Function: selectedInclusively],
+        selectedExclusively: [Function: selectedExclusively],
+        _mergeUpdate: [Function],
+        _optionsForExec: [Function],
+        _fieldsForExec: [Function],
+        _updateForExec: [Function],
+        _ensurePath: [Function],
+        _validate: [Function] } },
+  '$__insertMany': [Function],
+  insertMany: [Function] }
+finish
+Hello
+10
+60
+0
+NaN
+NaN
+10
+60
+0
+NaN
+NaN
+10
+60
+0
+NaN
+NaN
+10
+60
+0
+NaN
+NaN
+10
+60
+0
+NaN
+NaN
+10
+60
+0
+0.8894981015070477
+0.014290206436577465
+test_user
+10
+60
+0
+0.8894981015070477
+0.014290206436577465
+test_user2
+success send
+success send

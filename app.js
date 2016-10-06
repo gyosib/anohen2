@@ -25,10 +25,17 @@ var UsrSchema = new mongoose_usr.Schema({
 	y:Number
 });
 var MsgSchema = new mongoose_msg.Schema({
-	id:Number,
+	day:Date,
+	name:String,
+	open:Number,
+	x:Number,
+	y:Number,
+	msg:String
+	/*id:Number,
 	date:Date,
 	who:String,
-	msg:String
+	msg:String*/
+	
 });
 
 mongoose_usr.Promise = global.Promise;
@@ -172,7 +179,7 @@ io.sockets.on('connection', function(socket){
 	console.log("Listen:"+app.get('port'));
 	socket.on("sendmsg",function(data){
 		console.log("get message");
-		console.log(Usr);
+		//console.log(Usr);
 		//sending data
 		var r = data.r;
 		var dir = data.dir;
@@ -180,6 +187,7 @@ io.sockets.on('connection', function(socket){
 		var x0 = data.x;
 		var y0 = data.y;
 		//Find
+		Usr = usrmode.model('usr',UsrSchema);
 		Usr.find({},function(err,docs){
 			console.log("Hello");
 			for(var i=0;i<docs.length;i++){
@@ -200,7 +208,7 @@ io.sockets.on('connection', function(socket){
 					console.log(docs[i].name); //user data in range
 					var Msg_foru = msgmode.model(docs[i].name,MsgSchema);
 					var message = new Msg({
-						id:0,date:new Date(),name:"administractor",msg:"test"
+						day:new Date(),name:"administractor",open:0,msg:"test",x:0,y:0
 					});
 					message.save(function(err){
 						if(err) { 
