@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<head>
+<title>Sending</title>
+<body>
+<div id='showmsg'></div>
+<script src="../plugin/jquery-3.1.0.min.js"></script>
+<script src="../plugin/jquery-cookie/src/jquery.cookie.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script type="text/javascript">
+	var IP = "172.25.76.56";
+	var HTTP_PORT = "3100";
+	var HTTPS_PORT = "3200";
+	var s = io.connect('http://'+IP+':'+HTTP_PORT);
+
+$(function(){
+	s.emit("loadmsg",{name:"test_user_"});
+	s.on("loadmsg",function(data){
+		console.log("loadmsg");
+		for(var i=0;i<data.length;i++){
+			$('#showmsg').append(dateformat(data[i].date)+":"+data[i].who+"<br>");
+			$('#showmsg').append(data[i].msg+"<br>");
+		}
+	});
+});
+
+function dateformat(date){
+	date.toString();
+	date = new Date(date);
+	var y = date.getFullYear();
+	var m = date.getMonth()+1;
+	var d = date.getDate();
+	var w = date.getDay();
+	var hour = date.getHours();
+	var min = date.getMinutes();
+	var sec = date.getSeconds();
+	return y+"/"+m+"/"+d+"("+new String("日月火水木金土").charAt(w)+")"+hour+":"+min+":"+sec;
+}
+
+</script>
+</body>
+</html>

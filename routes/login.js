@@ -9,7 +9,7 @@ router.get('/',function(req,res){
 
 router.post('/',function(req,res){
 	var usrname = req.body.name;
-	var usrpass = req.body.password;
+	var usrpass = req.body.pass;
 	var query = {
 		name: usrname,
 		pass: usrpass

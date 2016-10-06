@@ -4,6 +4,9 @@
 <body>
 <div id="map" style="width:400px; height:300px"></div>
 <a id="send">send</a>
+<form id="form_box" action="/box" method="POST">
+	<a id="box" href="#">box</a>
+</form>
 <script src="../plugin/jquery-3.1.0.min.js"></script>
 <script src="../plugin/jquery-cookie/src/jquery.cookie.js"></script>
 <script src="/socket.io/socket.io.js"></script>
@@ -37,6 +40,10 @@ $('#send').on("click",function(){
 			day:today,msg:msg,name:name,open:open,r:r,x:x,y:y,dir:dir,theta:theta
 		});
 	console.log("send success!");
+});
+
+$('#box').on("click",function(){
+	$('#form_box').submit();
 });
 
 function drawmap(direction){
