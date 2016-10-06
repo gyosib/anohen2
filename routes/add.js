@@ -4,7 +4,15 @@ var model = require('../model.js');
 var User = model.User;
 
 router.post('/',function(req,res){
-	var newUser = new User(req.body);
+	var newUser = new User(
+	{
+		id:0,
+		name:req.body.name,
+		pass:req.body.pass,
+		x:1e-7,
+		y:1e-7
+	}
+	);
 	console.log(req.body);
 	newUser.save(function(err){
 		if(err){
