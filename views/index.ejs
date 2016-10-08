@@ -11,8 +11,11 @@
     <h1>My Site</h1>
     <p>Welcome to My Site</p>
     <%=user %> さんようこそ。
-	<form id='form' action="https://172.25.76.56:3200/get_gps" method="POST">
+	<form id='form_send' action="https://172.25.76.56:3200/get_gps" method="POST">
 		<a id='send' href='#'>send</a>
+	</form>
+	<form id='form_box' action="http://172.25.76.56:3100/box" method="POST">
+		<a id='box' href='#'>box</a>
 	</form>
     <p>
 	    <a href="/logout">ログアウト</a>
@@ -20,7 +23,10 @@
 
 	<script>
 		$('#send').click(function(){
-			$('#form').submit();
+			$('#form_box').submit();
+		});
+		$('#box').on("click",function(){
+			$('#form_box').submit();
 		});
 	</script>
 	</body>

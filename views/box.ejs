@@ -13,17 +13,18 @@
 	var s = io.connect('http://'+IP+':'+HTTP_PORT);
 
 $(function(){
-	s.emit("loadmsg",{name:"test_user_"});
+	s.emit("loadmsg",{name:"test_user"});
 	s.on("loadmsg",function(data){
 		console.log("loadmsg");
 		for(var i=0;i<data.length;i++){
-			$('#showmsg').append(dateformat(data[i].date)+":"+data[i].who+"<br>");
+			$('#showmsg').append(dateformat(data[i].day)+":"+data[i].who+"<br>");
 			$('#showmsg').append(data[i].msg+"<br>");
 		}
 	});
 });
 
 function dateformat(date){
+	console.log(date);
 	date.toString();
 	date = new Date(date);
 	var y = date.getFullYear();

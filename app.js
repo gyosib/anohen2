@@ -28,9 +28,9 @@ var MsgSchema = new mongoose_msg.Schema({
 	day:Date,
 	name:String,
 	open:Number,
+	msg:String,
 	x:Number,
-	y:Number,
-	msg:String
+	y:Number
 	/*id:Number,
 	date:Date,
 	who:String,
@@ -55,8 +55,8 @@ var msgmode = mongoose_msg.createConnection("mongodb://"+"localhost"+":27017/msg
 	}
 });
 
-var Usr = usrmode.model('usr',UsrSchema);
-var Msg = msgmode.model('test_user',MsgSchema);
+//var Usr = usrmode.model('usr',UsrSchema);
+//var Msg = msgmode.model('test_user',MsgSchema);
 
 //DataBase ====================
 
@@ -179,6 +179,8 @@ var io = require("socket.io")
 io.set('origins','*:*');
 io.sockets.on('connection', function(socket){
 	console.log("Listen:"+app.get('port'));
+	//mongoose_usr.connect();
+	//mongoose_msg.connect();
 	socket.on("sendmsg",function(data){
 		console.log("get message");
 		//console.log(Usr);
@@ -189,7 +191,7 @@ io.sockets.on('connection', function(socket){
 		var x0 = data.x;
 		var y0 = data.y;
 		//Find
-		Usr = usrmode.model('usr',UsrSchema);
+		var Usr = usrmode.model('usr',UsrSchema);
 		Usr.find({},function(err,docs){
 			console.log("Hello");
 			for(var i=0;i<docs.length;i++){
@@ -225,21 +227,29 @@ io.sockets.on('connection', function(socket){
 		console.log("finish");
 	});
 	socket.on("loadmsg",function(data){
-		console.log("loadmsg");
-	    var Msg = msgmode.model(data.name,MsgSchema);
+	    console.log("loadmsg");
+	    console.log(data.name);
+	    var Msg = msgmode.model('test_user',MsgSchema);
 	    Msg.find({},function(err,docs){
-		    if(err){
-		    	console.log(err);
-			}else{
-				console.log(docs);
-				io.sockets.emit("loadmsg",docs);
+		console.log("finding");
+	        if(err){
+	        	console.log(err);
+	       	}else{
+			console.log(docs);
+			io.sockets.emit("loadmsg",docs);
 			}
 		});
 	});
 	socket.on("disconnect",function(){
-		mongoose_usr.disconnect();
-		mongoose_msg.disconnect();
+		console.log("disconnect!");
+		/*mongoose_usr.disconnect();
+		mongoose_msg.disconnect();*/
 	});
+});
+
+process.on('SIGNAL',function(){
+	mongoose_usr.disconnect();
+	mongoose_msg.disconnect();
 });
 
 module.exports = app;

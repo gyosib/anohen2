@@ -31,4 +31,3 @@ var MesgSchema = new mongoose.Schema({
 },{collection: 'msg'});
 
 exports.User = db.model('usrs',UserSchema);
-exports.Mesg = db.model('msg',UserSchema);
