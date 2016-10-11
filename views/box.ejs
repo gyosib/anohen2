@@ -17,7 +17,7 @@ $(function(){
 	s.on("loadmsg",function(data){
 		console.log("loadmsg");
 		for(var i=0;i<data.length;i++){
-			$('#showmsg').append(dateformat(data[i].day)+":"+data[i].who+"<br>");
+			$('#showmsg').append(dateformat(data[i].day)+":"+data[i].name+"<br>");
 			$('#showmsg').append(data[i].msg+"<br>");
 		}
 	});

@@ -84,6 +84,7 @@ var logout = require('./routes/logout');
 var get_gps = require('./routes/get_gps');
 var send = require('./routes/send');
 var box = require('./routes/box');
+var friend = require('./routes/friend');
 
 // teach directory
 app.use('/plugin',express.static('plugin'));
@@ -108,6 +109,7 @@ app.use('/logout', logout);
 app.use('/get_gps', get_gps);
 app.use('/send', send);
 app.use('/box', box);
+app.use('/friend', friend);
 
 app.set("ipaddr","127.0.0.1");
 app.set("port",3100);

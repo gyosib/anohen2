@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<head>
+<title>New Friend!</title>
+<body>
+<div id='showmsg'></div>
+<script src="../plugin/jquery-3.1.0.min.js"></script>
+<script src="../plugin/jquery-cookie/src/jquery.cookie.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script type="text/javascript">
+	var IP = "172.25.76.56";
+	var HTTP_PORT = "3100";
+	var HTTPS_PORT = "3200";
+	var s = io.connect('http://'+IP+':'+HTTP_PORT);
+
+$(function(){
+	//GET X/Y
+	s.emit("searchfriend",{x:x,y:y});
+	s.on("searchfriend",function(data){
+		console.log("loadmsg");
+		for(var i=0;i<data.length;i++){
+			/*$('#showmsg').append(dateformat(data[i].day)+":"+data[i].name+"<br>");
+			$('#showmsg').append(data[i].msg+"<br>");*/
+		}
+	});
+});
+
+</script>
+</body>
+</html>

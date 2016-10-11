@@ -17,8 +17,11 @@
 	<form id='form_box' action="http://172.25.76.56:3100/box" method="POST">
 		<a id='box' href='#'>box</a>
 	</form>
+	<form id='form_friend' action="http://172.25.76.56:3100/friend" method="POST">
+		<a id='friend' href='#'>Add friend</a>
+	</form>
     <p>
-	    <a href="/logout">ログアウト</a>
+	    <a href="/logout">Logout</a>
     </p>
 
 	<script>
@@ -27,6 +30,9 @@
 		});
 		$('#box').on("click",function(){
 			$('#form_box').submit();
+		});
+		$('#friend').on("click",function(){
+			$('#form_friend').submit();
 		});
 	</script>
 	</body>
