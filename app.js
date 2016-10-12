@@ -11,6 +11,7 @@ var http = require('http');
 var https = require('https');
 var mongoose_usr = require('mongoose');
 var mongoose_msg = require('mongoose');
+var mongoose_fri = require('mongoose');
 
 var privateKey = fs.readFileSync('server.key','utf8');
 var certificate = fs.readFileSync('server.crt','utf8');
@@ -37,9 +38,14 @@ var MsgSchema = new mongoose_msg.Schema({
 	msg:String*/
 	
 });
+var FriSchema = new mongoose_fri.Schema({
+	id:Number,
+	name:String	
+});
 
 mongoose_usr.Promise = global.Promise;
 mongoose_msg.Promise = global.Promise;
+mongoose_fri.Promise = global.Promise;
 var usrmode = mongoose_usr.createConnection("mongodb://"+"localhost"+":27017/usr",function(err){
 	if(err){
 		console.log(err);
@@ -48,6 +54,13 @@ var usrmode = mongoose_usr.createConnection("mongodb://"+"localhost"+":27017/usr
 	}
 });
 var msgmode = mongoose_msg.createConnection("mongodb://"+"localhost"+":27017/msg",function(err){
+	if(err){
+		console.log(err);
+	}else{
+		console.log('connection success!');
+	}
+});
+var frimode = mongoose_fri.createConnection("mongodb://"+"localhost"+":27017/fri",function(err){
 	if(err){
 		console.log(err);
 	}else{
@@ -212,7 +225,7 @@ io.sockets.on('connection', function(socket){
 					theta_db <= (dir+theta/2)
 				){
 					console.log(docs[i].name); //user data in range
-					var Msg_foru = msgmode.model(docs[i].name,MsgSchema);
+					var Msg = msgmode.model(docs[i].name,MsgSchema);
 					var message = new Msg({
 						day:new Date(),name:"administractor",open:0,msg:"test",x:0,y:0
 					});
@@ -241,6 +254,52 @@ io.sockets.on('connection', function(socket){
 			io.sockets.emit("loadmsg",docs);
 			}
 		});
+	});
+	socket.on("searchfriend",function(data){
+		console.log("searchfriend");
+		var r = 5;
+		var dir = 0;
+		var theta = 360;
+		var x0 = data.x;
+		var y0 = data.y;
+		//Find
+		var Usr = usrmode.model('usr',UsrSchema);
+		Usr.find({},function(err,docs){
+			console.log("Hello");
+			for(var i=0;i<docs.length;i++){
+				var dx = 90000*(docs[i].x-x0);
+				var dy = 111000*(docs[i].y-y0);
+				var theta_db = Math.atan(dy/dx);
+				var r_db = dx/Math.cos(theta_db);
+				if(
+					r_db <= r && 
+					theta_db >= (dir-theta/2) && 
+					theta_db <= (dir+theta/2)
+				){
+					console.log(docs[i].name); //user data in range
+					io.sockets.emit("searchfriend",docs[i]);
+				}	
+			}
+		});
+		console.log("finish");
+	});
+	socket.on("addfriend",function(data){
+		console.log("addfriend");
+		//Find
+		var Usr = usrmode.model('usr',UsrSchema);
+			console.log("Hello");
+			var Fri = msgmode.model(data.myname,MsgSchema);
+			var myfriend = new Fri({
+				id:0,name:data.name
+			});
+			myfriend.save(function(err){
+				if(err) { 
+					console.log(err);
+				}else{
+					console.log('success send');
+				}
+			});
+		console.log("finish");
 	});
 	socket.on("disconnect",function(){
 		console.log("disconnect!");
