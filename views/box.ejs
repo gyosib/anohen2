@@ -5,14 +5,16 @@
 <div id='showmsg'></div>
 <script src="../plugin/jquery-3.1.0.min.js"></script>
 <script src="../plugin/jquery-cookie/src/jquery.cookie.js"></script>
+<script src="../plugin/get_location.js"></script>
 <script src="/socket.io/socket.io.js"></script>
 <script type="text/javascript">
 	var IP = "172.25.76.56";
 	var HTTP_PORT = "3100";
 	var HTTPS_PORT = "3200";
-	var s = io.connect('http://'+IP+':'+HTTP_PORT);
+	var s = io.connect('https://'+IP+':'+HTTPS_PORT);
 
 $(function(){
+	get_location();
 	s.emit("loadmsg",{name:"test_user"});
 	s.on("loadmsg",function(data){
 		console.log("loadmsg");

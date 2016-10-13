@@ -71,7 +71,9 @@ var frimode = mongoose_fri.createConnection("mongodb://"+"localhost"+":27017/fri
 //var Usr = usrmode.model('usr',UsrSchema);
 //var Msg = msgmode.model('test_user',MsgSchema);
 
-//DataBase ====================
+//=================== DataBase 
+
+//BasicSetting ====================
 
 var app = express();
 
@@ -187,15 +189,99 @@ httpsServer.listen(3200);
 
 //var server = app.listen(3100);
 
+//=================== BasicSetting
+
+//IO ====================
+
 // Socket IO
 var io = require("socket.io")
-	.listen(httpServer,{path:'/socket.io',log:false,origins:'*:*'});
+	.listen(httpsServer,{path:'/socket.io',log:false,origins:'*:*'});
 //var io = require("socket.io").listen(server);
 io.set('origins','*:*');
+
 io.sockets.on('connection', function(socket){
 	console.log("Listen:"+app.get('port'));
 	//mongoose_usr.connect();
 	//mongoose_msg.connect();
+	socket.on("loadmsg",function(data){
+	    console.log("loadmsg");
+	    console.log(data.name);
+	    var Msg = msgmode.model('test_user',MsgSchema);
+	    Msg.find({},function(err,docs){
+		console.log("finding");
+	        if(err){
+	        	console.log(err);
+	       	}else{
+			console.log(docs);
+			io.sockets.emit("loadmsg",docs);
+			}
+		});
+	});
+	socket.on("searchfriend",function(data){
+		console.log("searchfriend");
+		var r = 5;
+		var dir = 0;
+		var theta = 360;
+		var x0 = data.x;
+		var y0 = data.y;
+		//Find
+		var Usr = usrmode.model('usr',UsrSchema);
+		Usr.find({},function(err,docs){
+			console.log("Hello");
+			for(var i=0;i<docs.length;i++){
+				var dx = 90000*(docs[i].x-x0);
+				var dy = 111000*(docs[i].y-y0);
+				var theta_db = Math.atan(dy/dx);
+				var r_db = dx/Math.cos(theta_db);
+				if(
+					r_db <= r && 
+					theta_db >= (dir-theta/2) && 
+					theta_db <= (dir+theta/2)
+				){
+					console.log(docs[i].name); //user data in range
+					io.sockets.emit("searchfriend",docs[i]);
+				}	
+			}
+		});
+		console.log("finish");
+	});
+	socket.on("addfriend",function(data){
+		console.log("addfriend");
+		var Usr = usrmode.model('usr',UsrSchema);
+		console.log("Hello");
+		var Fri = frimode.model(data.myname,FriSchema);
+		var myfriend = new Fri({
+			id:0,name:data.name
+		});
+		Fri.find({id:0},function(err,data){
+			if(!err){
+				if(data.length == 0){
+					myfriend.save(function(err){
+						if(err) { 
+							console.log(err);
+						}else{
+							console.log('success send');
+						}
+					});
+				}
+			}
+		});
+		console.log("finish");
+	});
+	socket.on("disconnect",function(){
+		console.log("disconnect!");
+		/*mongoose_usr.disconnect();
+		mongoose_msg.disconnect();*/
+	});
+});
+
+// ==================== IO
+
+// IO for Map====================
+var io_map = require("socket.io")
+	.listen(httpServer,{path:'/socket.io',log:false,origins:'*:*'});
+io_map.set('origins','*:*');
+io.sockets.on('connection', function(socket){
 	socket.on("sendmsg",function(data){
 		console.log("get message");
 		//console.log(Usr);
@@ -241,73 +327,9 @@ io.sockets.on('connection', function(socket){
 		});
 		console.log("finish");
 	});
-	socket.on("loadmsg",function(data){
-	    console.log("loadmsg");
-	    console.log(data.name);
-	    var Msg = msgmode.model('test_user',MsgSchema);
-	    Msg.find({},function(err,docs){
-		console.log("finding");
-	        if(err){
-	        	console.log(err);
-	       	}else{
-			console.log(docs);
-			io.sockets.emit("loadmsg",docs);
-			}
-		});
-	});
-	socket.on("searchfriend",function(data){
-		console.log("searchfriend");
-		var r = 5;
-		var dir = 0;
-		var theta = 360;
-		var x0 = data.x;
-		var y0 = data.y;
-		//Find
-		var Usr = usrmode.model('usr',UsrSchema);
-		Usr.find({},function(err,docs){
-			console.log("Hello");
-			for(var i=0;i<docs.length;i++){
-				var dx = 90000*(docs[i].x-x0);
-				var dy = 111000*(docs[i].y-y0);
-				var theta_db = Math.atan(dy/dx);
-				var r_db = dx/Math.cos(theta_db);
-				if(
-					r_db <= r && 
-					theta_db >= (dir-theta/2) && 
-					theta_db <= (dir+theta/2)
-				){
-					console.log(docs[i].name); //user data in range
-					io.sockets.emit("searchfriend",docs[i]);
-				}	
-			}
-		});
-		console.log("finish");
-	});
-	socket.on("addfriend",function(data){
-		console.log("addfriend");
-		//Find
-		var Usr = usrmode.model('usr',UsrSchema);
-			console.log("Hello");
-			var Fri = msgmode.model(data.myname,MsgSchema);
-			var myfriend = new Fri({
-				id:0,name:data.name
-			});
-			myfriend.save(function(err){
-				if(err) { 
-					console.log(err);
-				}else{
-					console.log('success send');
-				}
-			});
-		console.log("finish");
-	});
-	socket.on("disconnect",function(){
-		console.log("disconnect!");
-		/*mongoose_usr.disconnect();
-		mongoose_msg.disconnect();*/
-	});
 });
 
+// ==================== IO for Map
 process.on('SIGNAL',function(){
 	mongoose_usr.disconnect();
 	mongoose_msg.disconnect();

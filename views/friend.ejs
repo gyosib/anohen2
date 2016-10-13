@@ -5,14 +5,16 @@
 <div id='showuser'></div>
 <script src="../plugin/jquery-3.1.0.min.js"></script>
 <script src="../plugin/jquery-cookie/src/jquery.cookie.js"></script>
+<script src="../plugin/get_location.js"></script>
 <script src="/socket.io/socket.io.js"></script>
 <script type="text/javascript">
 	var IP = "172.25.76.56";
 	var HTTP_PORT = "3100";
 	var HTTPS_PORT = "3200";
-	var s = io.connect('http://'+IP+':'+HTTP_PORT);
+	var s = io.connect('https://'+IP+':'+HTTPS_PORT);
 
 $(function(){
+	get_location();
 	//GET X/Y
 	var x = 0;
 	var y = 0;
@@ -20,8 +22,9 @@ $(function(){
 	s.emit("searchfriend",{x:x,y:y});
 	s.on("searchfriend",function(data){
 		console.log("loadmsg");
-		$('#showuser').append("<a class=\"friendlink\" id=\"" + data.name + "\" href=\"#\">" + data.name + "</a><br><br>");
-		$('.friendlink').on('click',function(){
+		var user_name = data.name;
+		$('#showuser').append("<a class=\"friendlink\" id=\"" + user_name + "\" href=\"#\">" + user_name + "</a><br><br>");
+		$('#'+user_name).on('click',function(){
 			console.log("click friend name");
 			name = $(this).attr('id');
 			s.emit("addfriend",{myname:"test_user",name:name});
