@@ -2,6 +2,9 @@
 <head>
 <title>Sending</title>
 <body>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, target-densityDpi=medium-dpi">
+
 <div id='showmsg'></div>
 <script src="../plugin/jquery-3.1.0.min.js"></script>
 <script src="../plugin/jquery-cookie/src/jquery.cookie.js"></script>
@@ -15,15 +18,22 @@
 
 $(function(){
 	get_location();
-	s.emit("loadmsg",{name:"test_user"});
+	s.emit("loadmsg",{name:$.cookie("username")});
 	s.on("loadmsg",function(data){
 		console.log("loadmsg");
 		for(var i=0;i<data.length;i++){
 			$('#showmsg').append(dateformat(data[i].day)+":"+data[i].name+"<br>");
 			$('#showmsg').append(data[i].msg+"<br>");
 		}
+		});
+	if($.cookie("gps_x")){
+		var name = $.cookie("username");
+		var x = $.cookie("gps_x");
+		var y = $.cookie("gps_y");
+		s.emit("update",{name:name,x:x,y:y});
+	}
+
 	});
-});
 
 function dateformat(date){
 	console.log(date);

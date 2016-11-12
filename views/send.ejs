@@ -2,11 +2,12 @@
 <head>
 <title>Sending</title>
 <body>
-<div id="map" style="width:400px; height:300px"></div>
-<a id="send">send</a>
-<form id="form_box" action="/box" method="POST">
-	<a id="box" href="#">box</a>
-</form>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, target-densityDpi=medium-dpi">
+
+<div id="map"></div>
+<a id="send" href="#">send</a>
+<link rel="stylesheet" type="text/css" href="../css/send.css">
 <script src="../plugin/jquery-3.1.0.min.js"></script>
 <script src="../plugin/jquery-cookie/src/jquery.cookie.js"></script>
 <script src="/socket.io/socket.io.js"></script>
@@ -22,33 +23,36 @@ $(function(){
     //drawmap(289);
 	ymap = new Y.Map("map");
 	window.addEventListener("deviceorientation",deviceorientationHandler);
-});
+	if($.cookie("gps_x")){
+		var name = $.cookie("username");
+		var x = $.cookie("gps_x");
+		var y = $.cookie("gps_y");
+		s.emit("update",{name:name,x:x,y:y});
+	}
+
+	});
 
 $('#send').on("click",function(){
-	//Oz data for Debug
-	var today = new Date();
-	var msg = "test"; //message
-	var name = "administer"; //who send
-	var open = 0; //close or open
-	var x = 0; //now location(x=keido)
-	var y = 0;      //now location(y=ido)
-	var dir = 0; //direction
-	var theta = 60;
-	var r = 10;
-	alert("send!");
-	s.emit("sendmsg",{
-			day:today,msg:msg,name:name,open:open,r:r,x:x,y:y,dir:dir,theta:theta
+		//Oz data for Debug
+		if($.cookie("gps_x")){
+		var msg = "test"; //message
+		var name = $.cookie("username");; //who send
+		var x = $.cookie("gps_x"); //now location(x=keido)
+		var y = $.cookie("gps_y");      //now location(y=ido)
+		var dir = $.cookie("direction"); //direction
+		var theta = 60;
+		var r = 10;
+		alert("send!");
+		s.emit("sendmsg",{
+msg:msg,name:name,r:r,x:x,y:y,dir:dir,theta:theta
+});
+		console.log(x);
+		}
 		});
-	console.log("send success!");
-});
-
-$('#box').on("click",function(){
-	$('#form_box').submit();
-});
 
 function drawmap(direction){
 	console.log("1");
-   	if($.cookie("gps_x")){
+	if($.cookie("gps_x")){
 		console.log("2");
 		var gx = +$.cookie("gps_x");
 		var gy = +$.cookie("gps_y");
@@ -65,66 +69,67 @@ function drawmap(direction){
 		var strokeStyle = new Y.Style("00ff00",4,0.7);
 		var fillStyle = new Y.Style("00ff00",null,0.2);
 		var circle = new Y.Circle(
-			new Y.LatLng(gy,gx),
-			new Y.Size(0.01,0.01),
-			{unit:"km",strokeStyle:strokeStyle,fillStyle:fillStyle}
-		);
+				new Y.LatLng(gy,gx),
+				new Y.Size(0.01,0.01),
+				{unit:"km",strokeStyle:strokeStyle,fillStyle:fillStyle}
+				);
 		var latlngs = [
 			new Y.LatLng(gy,gx),
-			new Y.LatLng(cir_mapy(100,dis-range/2,gy),cir_mapx(100,dis-range/2,gx)),
-			new Y.LatLng(cir_mapy(100,dis-range/3,gy),cir_mapx(100,dis-range/3,gx)),
-			new Y.LatLng(cir_mapy(100,dis-range/4,gy),cir_mapx(100,dis-range/4,gx)),
-			new Y.LatLng(cir_mapy(100,dis-range/5,gy),cir_mapx(100,dis-range/5,gx)),
-			new Y.LatLng(cir_mapy(100,dis-range/6,gy),cir_mapx(100,dis-range/6,gx)),
-			new Y.LatLng(cir_mapy(100,dis,gy),cir_mapx(100,dis,gx)),
-			new Y.LatLng(cir_mapy(100,dis+range/6,gy),cir_mapx(100,dis+range/6,gx)),
-			new Y.LatLng(cir_mapy(100,dis+range/5,gy),cir_mapx(100,dis+range/5,gx)),
-			new Y.LatLng(cir_mapy(100,dis+range/4,gy),cir_mapx(100,dis+range/4,gx)),
-			new Y.LatLng(cir_mapy(100,dis+range/3,gy),cir_mapx(100,dis+range/3,gx)),
-			new Y.LatLng(cir_mapy(100,dis+range/2,gy),cir_mapx(100,dis+range/2,gx))
+			    new Y.LatLng(cir_mapy(100,dis-range/2,gy),cir_mapx(100,dis-range/2,gx)),
+			    new Y.LatLng(cir_mapy(100,dis-range/3,gy),cir_mapx(100,dis-range/3,gx)),
+			    new Y.LatLng(cir_mapy(100,dis-range/4,gy),cir_mapx(100,dis-range/4,gx)),
+			    new Y.LatLng(cir_mapy(100,dis-range/5,gy),cir_mapx(100,dis-range/5,gx)),
+			    new Y.LatLng(cir_mapy(100,dis-range/6,gy),cir_mapx(100,dis-range/6,gx)),
+			    new Y.LatLng(cir_mapy(100,dis,gy),cir_mapx(100,dis,gx)),
+			    new Y.LatLng(cir_mapy(100,dis+range/6,gy),cir_mapx(100,dis+range/6,gx)),
+			    new Y.LatLng(cir_mapy(100,dis+range/5,gy),cir_mapx(100,dis+range/5,gx)),
+			    new Y.LatLng(cir_mapy(100,dis+range/4,gy),cir_mapx(100,dis+range/4,gx)),
+			    new Y.LatLng(cir_mapy(100,dis+range/3,gy),cir_mapx(100,dis+range/3,gx)),
+			    new Y.LatLng(cir_mapy(100,dis+range/2,gy),cir_mapx(100,dis+range/2,gx))
 		];
 		var polyline = new Y.Polygon(latlngs, {
-			strokeStyle: strokeStyle,fillStyle: fillStyle});
+strokeStyle: strokeStyle,fillStyle: fillStyle});
 		ymap.addFeature(circle);
 		ymap.addFeature(polyline);
 		window.setTimeout(function(){
-			ymap.removeFeature(circle);
-			ymap.removeFeature(polyline);
-		},200);
+				ymap.removeFeature(circle);
+				ymap.removeFeature(polyline);
+				},200);
 	}
-		console.log("5");
+	console.log("5");
 }	
 
 function deviceorientationHandler(event) {
-   	//Axis
+	//Axis
 	console.log("device");
 	var beta = event.beta; //x
-  	var gamma = event.gamma; //y
-   	var alpha = event.alpha; //z
-   	
+	var gamma = event.gamma; //y
+	var alpha = event.alpha; //z
+
 	//Direction
 	//var compassHeading = getCompassHeading(alpha, beta, gamma);
 	var compassHeading = getCompassHeading(alpha, beta, gamma);
-   	var direction = 360 - compassHeading;
+	var direction = 360 - compassHeading;
+	$.cookie("direction",alpha+90);
 	drawmap((alpha+90));
 }
 
 function getCompassHeading(alpha, beta, gamma) {
 	//Get Direction from axis data
 	var degtorad = Math.PI / 180;
-   	var _x = beta ? beta * degtorad : 0;
-   	var _y = gamma ? gamma * degtorad : 0;
-   	var _z = alpha ? alpha * degtorad : 0;
-   	var cY = Math.cos(_y);
-   	var cZ = Math.cos(_z);
+	var _x = beta ? beta * degtorad : 0;
+	var _y = gamma ? gamma * degtorad : 0;
+	var _z = alpha ? alpha * degtorad : 0;
+	var cY = Math.cos(_y);
+	var cZ = Math.cos(_z);
 	var sX = Math.sin(_x);
- 	var sY = Math.sin(_y);
-   	var sZ = Math.sin(_z);
-   	var Vx = -cZ * sY - sZ * sX * cY;
-   	var Vy = -sZ * sY + cZ * sX * cY;
-   	var compassHeading = Math.atan(Vx / Vy);
-   	if (Vy < 0) {
-      	compassHeading += Math.PI;
+	var sY = Math.sin(_y);
+	var sZ = Math.sin(_z);
+	var Vx = -cZ * sY - sZ * sX * cY;
+	var Vy = -sZ * sY + cZ * sX * cY;
+	var compassHeading = Math.atan(Vx / Vy);
+	if (Vy < 0) {
+		compassHeading += Math.PI;
 	}else if (Vx < 0){
 		compassHeading += 2 * Math.PI;
 	}

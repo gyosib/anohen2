@@ -2,11 +2,15 @@
 <head>
 <title>New Friend!</title>
 <body>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, target-densityDpi=medium-dpi">
+
 <div id='showuser'></div>
 <script src="../plugin/jquery-3.1.0.min.js"></script>
 <script src="../plugin/jquery-cookie/src/jquery.cookie.js"></script>
 <script src="../plugin/get_location.js"></script>
 <script src="/socket.io/socket.io.js"></script>
+<script src="../plugin/jquery-cookie/src/jquery.cookie.js"></script>
 <script type="text/javascript">
 	var IP = "172.25.76.56";
 	var HTTP_PORT = "3100";
@@ -16,24 +20,28 @@
 $(function(){
 	get_location();
 	//GET X/Y
-	var x = 0;
-	var y = 0;
-	//^ Need to Fix
-	s.emit("searchfriend",{x:x,y:y});
-	s.on("searchfriend",function(data){
-		console.log("loadmsg");
-		var user_name = data.name;
-		$('#showuser').append("<a class=\"friendlink\" id=\"" + user_name + "\" href=\"#\">" + user_name + "</a><br><br>");
-		$('#'+user_name).on('click',function(){
-			console.log("click friend name");
-			name = $(this).attr('id');
-			s.emit("addfriend",{myname:"test_user",name:name});
-		});
+	if($.cookie("gps_x")){
+		var x = $.cookie("gps_x");
+		var y = $.cookie("gps_y");
+                var name = $.cookie("username");
+                s.emit("update",{name:name,x:x,y:y});
+		//^ Need to Fix
+		s.emit("searchfriend",{x:x,y:y});
+		s.on("searchfriend",function(data){
+			console.log("loadmsg");
+			var user_name = data.name;
+			$('#showuser').append("<a class=\"friendlink\" id=\"" + user_name + "\" href=\"#\">" + user_name + "</a><br><br>");
+			$('#'+user_name).on('click',function(){
+				console.log("click friend name");
+				name = $(this).attr('id');
+				s.emit("addfriend",{myname:$.cookie("username"),name:name});
+			});
 
-		$('#test_user').on('click',function(){
-			console.log("click friend name");
+			$('#test_user').on('click',function(){
+				console.log("click friend name");
+			});
 		});
-	});
+	}
 });
 
 

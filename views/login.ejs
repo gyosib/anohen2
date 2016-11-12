@@ -2,20 +2,24 @@
 <html lang="ja">
 	<head>
 	    <meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, target-densityDpi=medium-dpi">
+
+	    <link rel="stylesheet" type="text/css" href="../css/login.css"></link>
+		<script src="../plugin/get_location.js"></script>
 	    <title>ログイン画面</title>
 	</head>
 	<body>
 	    <h2>ログイン</h2>
 		    <form action="/login" method="POST">
-		        <input type="text" name="name" placeholder="Your name" />
-		        <input type="password" name="pass" placeholder="Password" />
-		        <input type="submit">ログイン</button>
+		        <input class="form_control" type="text" name="name" placeholder="Your name" />
+		        <input class="form_control" type="password" name="pass" placeholder="Password" />
+		        <input class="form_control" type="submit" value="ログイン">
 		    </form>
 		    <h2>新規登録</h2>
 		    <form action="/add" method="POST">
-	        	<input type="text" name="name" placeholder="Your Name" />
-	        	<input type="password" name="pass" placeholder="Password" />
-	        	<input type="submit">新規登録</button>
+	        	<input class="form_control" type="text" name="name" placeholder="Your Name" />
+	        	<input class="form_control" type="password" name="pass" placeholder="Password" />
+	        	<input class="form_control" type="submit" value="新規登録">
 	    </form>
 	</body>
 </html>

@@ -1,6 +1,6 @@
 var express = require('express');
 var path = require('path');
-var favicon = require('serve-favicon');
+//var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
@@ -103,6 +103,7 @@ var friend = require('./routes/friend');
 
 // teach directory
 app.use('/plugin',express.static('plugin'));
+app.use('/css',express.static('css'));
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -206,7 +207,7 @@ io.sockets.on('connection', function(socket){
 	socket.on("loadmsg",function(data){
 	    console.log("loadmsg");
 	    console.log(data.name);
-	    var Msg = msgmode.model('test_user',MsgSchema);
+	    var Msg = msgmode.model(data.name,MsgSchema);
 	    Msg.find({},function(err,docs){
 		console.log("finding");
 	        if(err){
@@ -268,6 +269,15 @@ io.sockets.on('connection', function(socket){
 		});
 		console.log("finish");
 	});
+	socket.on("update",function(data){
+		console.log("update");
+		var Usr = usrmode.model('usr',UsrSchema);
+		console.log("Hello");
+		Usr.update({name:data.name},{$set:{x:data.x, y:data.y}},
+		function(err){
+			if(err) throw err;
+		});;
+	});
 	socket.on("disconnect",function(){
 		console.log("disconnect!");
 		/*mongoose_usr.disconnect();
@@ -281,7 +291,7 @@ io.sockets.on('connection', function(socket){
 var io_map = require("socket.io")
 	.listen(httpServer,{path:'/socket.io',log:false,origins:'*:*'});
 io_map.set('origins','*:*');
-io.sockets.on('connection', function(socket){
+io_map.sockets.on('connection', function(socket){
 	socket.on("sendmsg",function(data){
 		console.log("get message");
 		//console.log(Usr);
@@ -291,6 +301,7 @@ io.sockets.on('connection', function(socket){
 		var theta = data.theta;
 		var x0 = data.x;
 		var y0 = data.y;
+		console.log({"r":r,"dir":dir,"theta":theta,"x0":x0,"y0":y0});
 		//Find
 		var Usr = usrmode.model('usr',UsrSchema);
 		Usr.find({},function(err,docs){
@@ -313,7 +324,7 @@ io.sockets.on('connection', function(socket){
 					console.log(docs[i].name); //user data in range
 					var Msg = msgmode.model(docs[i].name,MsgSchema);
 					var message = new Msg({
-						day:new Date(),name:"administractor",open:0,msg:"test",x:0,y:0
+						day:new Date(),name:data.name,open:0,msg:data.msg,x:data.x,y:data.y
 					});
 					message.save(function(err){
 						if(err) { 
