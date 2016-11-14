@@ -104,6 +104,7 @@ var friend = require('./routes/friend');
 // teach directory
 app.use('/plugin',express.static('plugin'));
 app.use('/css',express.static('css'));
+app.use('/image',express.static('image'));
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

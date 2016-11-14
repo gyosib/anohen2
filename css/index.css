@@ -1,0 +1,36 @@
+ul.link {
+	display:table;
+	table-layout:fixed;
+	width:100%;
+	padding-bottom: 40px;
+	padding-left: 0px;
+}
+
+ul.link li {
+	display:table-cell;
+	vertical-align:middle;
+	text-align:center;
+	border-left:1px solid white;
+}
+
+ul.link li:first-child {
+	border:none;    
+}
+
+ul.link li a {
+	display:block;
+	text-decoration:none;
+	color:white;
+}
+
+#form_box {
+	background-color: blue;
+}
+
+#form_send {
+	background-color: orange;
+}
+
+#form_friend {
+	background-color: green;
+}

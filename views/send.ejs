@@ -1,28 +1,35 @@
 <!DOCTYPE html>
 <head>
 <title>Sending</title>
-<body>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, target-densityDpi=medium-dpi">
-
-<div id="map"></div>
-<a id="send" href="#">send</a>
 <link rel="stylesheet" type="text/css" href="../css/send.css">
 <script src="../plugin/jquery-3.1.0.min.js"></script>
 <script src="../plugin/jquery-cookie/src/jquery.cookie.js"></script>
 <script src="/socket.io/socket.io.js"></script>
 <script type="text/javascript" charset="utf-8" src="http://js.api.olp.yahooapis.jp/OpenLocalPlatform/V1/jsapi?appid=dj0zaiZpPVJHakJrSDFTQUd1aSZzPWNvbnN1bWVyc2VjcmV0Jng9NGY-"></script>
+
+<body>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, target-densityDpi=medium-dpi">
+
+<div id="map"></div>
+<img class="drag" id="arrow" src="image/arrow.jpg">
+<a id="send" href="#">send</a>
 <script type="text/javascript">
 	var IP = "172.25.76.56";
 	var HTTP_PORT = "3100";
 	var HTTPS_PORT = "3200";
 	var s = io.connect('http://'+IP+':'+HTTP_PORT);
+	var sx;
+	var sy;
 $(function(){
+
 	console.log("start");
 	tri = 1; //if tri=1 then draw map
     //drawmap(289);
 	ymap = new Y.Map("map");
 	window.addEventListener("deviceorientation",deviceorientationHandler);
+	$('.drag').on("mousedown",mdown);
+	$('.drag').on("touchstart",mdown);
 	if($.cookie("gps_x")){
 		var name = $.cookie("username");
 		var x = $.cookie("gps_x");
@@ -142,11 +149,56 @@ function cir_mapx(r,theta,gx){
 	console.log(disx);
 	return disx;
 }
+
 function cir_mapy(r,theta,gy){
 	var disy = r/111000*Math.sin(theta/180*Math.PI)+gy; //ido in do
 	console.log(disy);
 	return disy;
 }
+
+//mouse down function
+function mdown(e) {
+	console.log("drag!");
+	if(e.type == "mousedown"){
+		var event = e;
+	}else{
+		var event = e.changedTouches[0];
+	}
+
+	sx = event.pageX - this.offsetLeft;
+	sy = event.pageY - this.offsetTop;
+
+	$('body').on("mousemove",mmove);
+	$('body').on("touchmove",mmove);
+}
+
+function mmove(e){
+	if(e.type == "mousemove"){
+		var event = e;
+	}else{
+		var event = e.changedTouches[0];
+	}
+		
+	e.preventDefault();
+
+	$('.drag').offset({top:event.pageY-sy});
+
+	$('.drag').on("mouseup",mup);
+	$('body').on("mouseleave",mup);
+	$('.drag').on("touchend",mup);
+	$('body').on("touchleave",mup);
+}
+
+//mouse up function
+function mup(e){
+
+	$('body').unbind();
+	$('.drag').unbind('mousemove',mmove);
+	$('.drag').unbind('touchmove',mmove);
+	
+	$('.drag').offset({top:10});
+}
+
 
 //function sendmsg(
 </script>

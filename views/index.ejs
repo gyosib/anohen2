@@ -4,6 +4,7 @@
 <head>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, target-densityDpi=medium-dpi">
     <meta charset="UTF-8">
+	<link rel="stylesheet" type="text/css" href="../css/index.css">
 	<script type="text/javascript" src="../plugin/jquery-3.1.0.min.js"></script>
 	<script src="../plugin/jquery-cookie/src/jquery.cookie.js"></script>
 	<script src="../plugin/get_location.js"></script>
@@ -14,15 +15,23 @@
 
 <body>
     <%=user %> さん
+	<ul class = "link">
+	<li>
+	<form id='form_box' action="https://172.25.76.56:3200/box" method="POST">
+		<a id='box' href='#'>box</a></li>
+	</form>
+	</li>
+	<li>
 	<form id='form_send' action="http://172.25.76.56:3100/send" method="POST">
 		<a id='send' href='#'>send</a>
 	</form>
-	<form id='form_box' action="https://172.25.76.56:3200/box" method="POST">
-		<a id='box' href='#'>box</a>
-	</form>
+	</li>
+	<li>
 	<form id='form_friend' action="https://172.25.76.56:3200/friend" method="POST">
-		<a id='friend' href='#'>Add friend</a>
+		<a id='friend' href='#'>Add friend</a></li>
 	</form>
+	</li>
+	</ul>
     <p>
 	    <a href="/logout">Logout</a>
     </p>
