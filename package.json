@@ -13,6 +13,7 @@
     "ejs": "~2.4.1",
     "express": "~4.13.4",
     "express-session": "^1.14.1",
+    "forever": "^0.15.3",
     "fs": "0.0.1-security",
     "jQuery": "^1.7.4",
     "jsdom": "^9.6.0",

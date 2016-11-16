@@ -15,14 +15,13 @@
 <img class="drag" id="arrow" src="image/arrow.jpg">
 <a id="send" href="#">send</a>
 <script type="text/javascript">
-	var IP = "172.25.76.56";
-	var HTTP_PORT = "3100";
-	var HTTPS_PORT = "3200";
+	var IP = "160.16.216.231";
+	var HTTP_PORT = "80";
+	var HTTPS_PORT = "443";
 	var s = io.connect('http://'+IP+':'+HTTP_PORT);
 	var sx;
 	var sy;
 $(function(){
-
 	console.log("start");
 	tri = 1; //if tri=1 then draw map
     //drawmap(289);
@@ -42,7 +41,7 @@ $(function(){
 $('#send').on("click",function(){
 		//Oz data for Debug
 		if($.cookie("gps_x")){
-		var msg = "test"; //message
+		var msg = $.cookie("message"); //message
 		var name = $.cookie("username");; //who send
 		var x = $.cookie("gps_x"); //now location(x=keido)
 		var y = $.cookie("gps_y");      //now location(y=ido)

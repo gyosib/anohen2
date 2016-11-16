@@ -14,7 +14,8 @@ var UserSchema = new mongoose.Schema({
 	name: String,
 	pass: String,
 	x: Number,
-	y: Number
+	y: Number,
+    endpoint: String
 },{collection: 'usrs'});
 
 var MesgSchema = new mongoose.Schema({

@@ -1,0 +1,7 @@
+{
+    "name": "anohennifumi",
+    "short_name": "anohennifumi",
+    "start_url": "/",
+    "display": "standalone",
+    "gcm_sender_id": "116528133233"
+}

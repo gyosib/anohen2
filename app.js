@@ -23,7 +23,8 @@ var UsrSchema = new mongoose_usr.Schema({
 	name:String,
 	pass:String,
 	x:Number,
-	y:Number
+	y:Number,
+    endpoint:String
 });
 var MsgSchema = new mongoose_msg.Schema({
 	day:Date,
@@ -129,7 +130,7 @@ app.use('/box', box);
 app.use('/friend', friend);
 
 app.set("ipaddr","127.0.0.1");
-app.set("port",3100);
+app.set("port",80);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -186,10 +187,14 @@ app.use(function(req,res,next){
 // Create Server(http or https)
 var httpServer = http.createServer(app);
 var httpsServer = https.createServer(credentials,app);
-httpServer.listen(3100);
-httpsServer.listen(3200);
+httpServer.listen(80,function(){
+//	process.setuid("medjed");
+});
+httpsServer.listen(443,function(){
+//	process.setuid("medjed");
+});
 
-//var server = app.listen(3100);
+//var server = app.listen(80);
 
 //=================== BasicSetting
 
@@ -274,7 +279,7 @@ io.sockets.on('connection', function(socket){
 		console.log("update");
 		var Usr = usrmode.model('usr',UsrSchema);
 		console.log("Hello");
-		Usr.update({name:data.name},{$set:{x:data.x, y:data.y}},
+		Usr.update({name:data.name},{$set:{x:data.x, y:data.y,endpoint:endpoint}},
 		function(err){
 			if(err) throw err;
 		});;
@@ -310,17 +315,17 @@ io_map.sockets.on('connection', function(socket){
 			for(var i=0;i<docs.length;i++){
 				var dx = 90000*(docs[i].x-x0);
 				var dy = 111000*(docs[i].y-y0);
-				var theta_db = Math.atan(dy/dx);
-				var r_db = dx/Math.cos(theta_db);
+				var theta_db = Math.abs(Math.atan(dy/dx));
+				var r_db = Math.abs(dx/Math.cos(theta_db));
 				console.log(r);
 				console.log(theta);			
 				console.log(dir);
-				console.log(theta_db);
+                console.log("-----");
+                console.log(theta_db);
 				console.log(r_db);
 				if(
 					r_db <= r && 
-					theta_db >= (dir-theta/2) && 
-					theta_db <= (dir+theta/2)
+					theta_db <= (theta)
 				){
 					console.log(docs[i].name); //user data in range
 					var Msg = msgmode.model(docs[i].name,MsgSchema);
