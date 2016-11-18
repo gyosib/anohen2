@@ -118,6 +118,7 @@ function showCurlCommand(mergedEndpoint) {
       ' -d "{\\"registration_ids\\":[\\"' + subscriptionId + '\\"]}"';
   
   $.cookie("endpoint",subscriptionId);
+  console.log(subscriptionId);
   curlCommandArea.textContent = curlCommand;
   
   selectCurlText();

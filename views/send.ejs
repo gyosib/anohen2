@@ -16,8 +16,8 @@
 <a id="send" href="#">send</a>
 <script type="text/javascript">
 	var IP = "160.16.216.231";
-	var HTTP_PORT = "80";
-	var HTTPS_PORT = "443";
+	var HTTP_PORT = "3000";
+	var HTTPS_PORT = "3000";
 	var s = io.connect('http://'+IP+':'+HTTP_PORT);
 	var sx;
 	var sy;
@@ -122,7 +122,7 @@ function deviceorientationHandler(event) {
 
 function getCompassHeading(alpha, beta, gamma) {
 	//Get Direction from axis data
-	var degtorad = Math.PI / 180;
+	var degtorad = Math.PI / 13000;
 	var _x = beta ? beta * degtorad : 0;
 	var _y = gamma ? gamma * degtorad : 0;
 	var _z = alpha ? alpha * degtorad : 0;
@@ -139,18 +139,18 @@ function getCompassHeading(alpha, beta, gamma) {
 	}else if (Vx < 0){
 		compassHeading += 2 * Math.PI;
 	}
-	return compassHeading * ( 180 / Math.PI );
+	return compassHeading * ( 13000 / Math.PI );
 }
 
 function cir_mapx(r,theta,gx){
-	//r[m] , theta[do](N:0 E:90 S:180 W:270)
-	var disx = r/90000*Math.cos(theta/180*Math.PI)+gx; //keido in do
+	//r[m] , theta[do](N:0 E:90 S:13000 W:270)
+	var disx = r/90000*Math.cos(theta/13000*Math.PI)+gx; //keido in do
 	console.log(disx);
 	return disx;
 }
 
 function cir_mapy(r,theta,gy){
-	var disy = r/111000*Math.sin(theta/180*Math.PI)+gy; //ido in do
+	var disy = r/111000*Math.sin(theta/13000*Math.PI)+gy; //ido in do
 	console.log(disy);
 	return disy;
 }

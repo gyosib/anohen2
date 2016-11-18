@@ -9,6 +9,7 @@
 	<script src="../plugin/jquery-cookie/src/jquery.cookie.js"></script>
 	<script src="../plugin/get_location.js"></script>
 	<script src="../plugin/push.js"></script>
+    <link rel="manifest" href="../plugin/manifest.json">
 	<script src="/socket.io/socket.io.js"></script>
 
 	    <title>あの辺に文</title>
@@ -18,17 +19,17 @@
     <%=user %> さん
 	<ul class = "link">
 	<li>
-	<form id='form_box' action="https://160.16.216.231:443/box" method="POST">
+	<form id='form_box' action="https://160.16.216.231:3000/box" method="POST">
 		<a id='box' href='#'>box</a></li>
 	</form>
 	</li>
 	<li>
-	<form id='form_send' action="http://160.16.216.231:80/send" method="POST">
+	<form id='form_send' action="http://160.16.216.231:3000/send" method="POST">
 		<a id='send' href='#'>send</a>
 	</form>
 	</li>
 	<li>
-	<form id='form_friend' action="https://160.16.216.231:443/friend" method="POST">
+	<form id='form_friend' action="https://160.16.216.231:3000/friend" method="POST">
 		<a id='friend' href='#'>Add friend</a></li>
 	</form>
 	</li>
@@ -40,8 +41,8 @@
 
 	<script>
 		var IP = "160.16.216.231";
-		var HTTP_PORT = "80";
-		var HTTPS_PORT = "443";
+		var HTTP_PORT = "3000";
+		var HTTPS_PORT = "3000";
 		var s = io.connect('https://'+IP+':'+HTTPS_PORT);
 		$.cookie("username","<%=user %>");
 		console.log($.cookie("username"));
@@ -61,8 +62,9 @@
 			var name = $.cookie("username");
 			var x = $.cookie("gps_x");
 			var y = $.cookie("gps_y");
-			var endpint = $.cookie("endpoint");
-			s.emit("update",{name:name,x:x,y:y,endpoint:endpint});
+			var endpoint = $.cookie("endpoint");
+            console.log(endpoint);
+			s.emit("update",{name:name,x:x,y:y,endpoint:endpoint});
 		}	
 	</script>
 	</body>

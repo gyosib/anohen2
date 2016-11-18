@@ -101,6 +101,7 @@ var get_gps = require('./routes/get_gps');
 var send = require('./routes/send');
 var box = require('./routes/box');
 var friend = require('./routes/friend');
+//var service = require('./service-worker');
 
 // teach directory
 app.use('/plugin',express.static('plugin'));
@@ -128,9 +129,10 @@ app.use('/get_gps', get_gps);
 app.use('/send', send);
 app.use('/box', box);
 app.use('/friend', friend);
+//app.use('/service-worker', service);
 
 app.set("ipaddr","127.0.0.1");
-app.set("port",80);
+app.set("port",3100);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -187,14 +189,14 @@ app.use(function(req,res,next){
 // Create Server(http or https)
 var httpServer = http.createServer(app);
 var httpsServer = https.createServer(credentials,app);
-httpServer.listen(80,function(){
+httpServer.listen(3100,function(){
 //	process.setuid("medjed");
 });
-httpsServer.listen(443,function(){
+httpsServer.listen(3200,function(){
 //	process.setuid("medjed");
 });
 
-//var server = app.listen(80);
+//var server = app.listen(3100);
 
 //=================== BasicSetting
 
@@ -329,6 +331,21 @@ io_map.sockets.on('connection', function(socket){
 				){
 					console.log(docs[i].name); //user data in range
 					var Msg = msgmode.model(docs[i].name,MsgSchema);
+                    var headers = {
+                        'Authorization': 'key=AIzaSyCrEo83lubM6YQlcVaRdSkrXktmXDMz1Tos',
+                        'Content-Type': "application/json"
+                    }
+                    var option = {
+                        url: 'https://android.googleapis.com/gcm/send',
+                        methid: 'POST',
+                        headers: headers,
+                        json: true,
+                        form: {'registration_ids':[docs[i].endpoint]}
+                    }
+
+                    request(option, function(error,response,body){
+                    
+                    })
 					var message = new Msg({
 						day:new Date(),name:data.name,open:0,msg:data.msg,x:data.x,y:data.y
 					});
